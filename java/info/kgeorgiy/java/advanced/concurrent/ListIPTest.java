@@ -4,8 +4,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -35,6 +34,15 @@ public class ListIPTest<P extends ListIP> extends ScalarIPTest<P> {
     @Test
     public void test09_map() throws InterruptedException {
         test((data, f) -> data.stream().map(f).collect(Collectors.toList()), ListIP::map, functions);
+    }
+
+    @Test
+    public void test10_mapMaximum() throws InterruptedException {
+        test(
+                (data, f) -> data.stream().map(f).map(Objects::toString).max(Comparator.naturalOrder()),
+                (instance, threads, data, f) -> Optional.of(instance.<String>maximum(threads, instance.map(threads, data, f.andThen(Objects::toString)), Comparator.naturalOrder())),
+                functions
+        );
     }
 
     private final List<Named<Function<Integer, ?>>> functions = Arrays.asList(
