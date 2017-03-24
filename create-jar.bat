@@ -1,0 +1,1 @@
+jar cvfe temp/implementor.jar ru.ifmo.ctddev.golchin.implementor.Implementor -C out\production\java-advanced-2017 ru/ifmo/ctddev/golchin/implementor/Implementor.class -C out\production\java-advanced-2017 info/kgeorgiy/java/advanced/implementor
