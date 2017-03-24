@@ -3,6 +3,25 @@
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/java-advanced/homeworks.html)
 
+Домашнее задание 7. Параллельный запуск
+----
+* Протестировать простую версию задания:
+
+        info.kgeorgiy.java.advanced.mapper.Tester scalar <ParallelMapperImpl>,<IterativeParallelism>
+
+* Протестировать сложную версию задания:
+
+        info.kgeorgiy.java.advanced.mapper.Tester list <ParallelMapperImpl>,<IterativeParallelism>
+
+Внимание! Между полными именами классов `ParallelMapperImpl` и `IterativeParallelism` должна
+быть запятая и не должно быть пробелов.
+
+Исходный код тестов:
+
+* [Простой вариант](java/info/kgeorgiy/java/advanced/mapper/ScalarMapperTest.java)
+* [Сложный вариант](java/info/kgeorgiy/java/advanced/mapper/ListMapperTest.java)
+
+
 Домашнее задание 6. Итеративный параллелизм
 ----
 * Протестировать сложную версию задания:
