@@ -162,8 +162,7 @@ public class Implementor implements JarImpler {
      *
      * @param token type token to create implementation for.
      * @param jarPath target <tt>.jar</tt> file.
-     * @throws ImplerException when implementation cannot be generated.
-     * @throws ImplerException if the type token does not represent an interface
+     * @throws info.kgeorgiy.java.advanced.implementor.ImplerException if the type token does not represent an interface
      */
     public void implementJar(Class<?> token, Path jarPath) throws ImplerException {
         Path path = jarPath.subpath(0, 1);
