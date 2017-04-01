@@ -86,12 +86,12 @@ public class ScalarIPTest<P extends ScalarIP> extends BaseTest {
         final int procs = Runtime.getRuntime().availableProcessors();
         final double speedup = speedup(data, BURN_COMPARATOR, procs, procs);
         Assert.assertTrue("Not parallel", speedup > procs / 1.5);
-        Assert.assertTrue("Too parallel", speedup < procs * 1.1);
+        Assert.assertTrue("Too parallel", speedup < procs * 1.2);
     }
 
     protected double speedup(final List<Integer> data, final Comparator<Integer> sleepComparator, final int parts, final int threads) throws InterruptedException {
-        final long time1 = speed(threads, 1, data, ScalarIP::maximum, sleepComparator);
-        final long time2 = speed(threads, parts, data, ScalarIP::maximum, sleepComparator);
+        final long time1 = speed(1, 4, data, ScalarIP::maximum, sleepComparator);
+        final long time2 = speed(threads, 4 * parts, data, ScalarIP::maximum, sleepComparator);
         final double speedup = time1 / (double) time2;
         System.err.format("Speed up %.1f\n", speedup);
         return speedup;

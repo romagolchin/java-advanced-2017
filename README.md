@@ -3,6 +3,11 @@
 
 [Условия домашних заданий](http://www.kgeorgiy.info/courses/java-advanced/homeworks.html)
 
+Домашнее задание 8. Web Crawler
+----
+* [Интерфейсы и вспомогательные классы](java/info/kgeorgiy/java/advanced/crawler/)
+
+
 Домашнее задание 7. Параллельный запуск
 ----
 * Протестировать простую версию задания:
