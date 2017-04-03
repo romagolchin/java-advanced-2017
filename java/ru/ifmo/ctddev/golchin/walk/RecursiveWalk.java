@@ -1,4 +1,4 @@
-package ru.ifmo.ctddev.golchin.walk;
+package ru.ifmo.ctddev.golchin.crawler;
 
 /**
  * Created by Roman on 12/02/2017.

@@ -1,4 +1,4 @@
-package ru.ifmo.ctddev.golchin.walk;
+package ru.ifmo.ctddev.golchin.crawler;
 
 import java.io.IOException;
 import java.io.InputStream;
