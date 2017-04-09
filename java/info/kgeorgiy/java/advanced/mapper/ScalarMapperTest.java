@@ -39,6 +39,15 @@ public class ScalarMapperTest extends ScalarIPTest<ScalarIP> {
         return (ScalarIP) create(names[1], ParallelMapper.class, parallelMapper);
     }
 
+    @Override
+    protected int getSubtasks(final int threads, final int totalThreads) {
+        return subtasks(totalThreads);
+    }
+
+    protected static int subtasks(final int totalThreads) {
+        return totalThreads * 4;
+    }
+
     @AfterClass
     public static void close() {
         try {

@@ -28,6 +28,11 @@ public class ListMapperTest extends ListIPTest {
         return ScalarMapperTest.instance(threads);
     }
 
+    @Override
+    protected int getSubtasks(final int threads, final int totalThreads) {
+        return ScalarMapperTest.subtasks(totalThreads);
+    }
+
     @AfterClass
     public static void close() {
         ScalarMapperTest.close();

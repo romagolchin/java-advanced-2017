@@ -21,9 +21,11 @@ import java.util.stream.IntStream;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ScalarIPTest<P extends ScalarIP> extends BaseTest {
+    public static final int PROCESSORS = Runtime.getRuntime().availableProcessors();
+
     public static final Comparator<Integer> BURN_COMPARATOR = (o1, o2) -> {
         int total = o1 + o2;
-        for (int i = 0; i < 50_000_000; i++) {
+        for (int i = 0; i < 5_000_000; i++) {
             total += i;
         }
         if (total == o1 + o2) {
@@ -74,33 +76,46 @@ public class ScalarIPTest<P extends ScalarIP> extends BaseTest {
 
     @Test
     public void test05_sleepPerformance() throws InterruptedException {
-        final List<Integer> data = randomList(200);
-        final int procs = Runtime.getRuntime().availableProcessors();
-        final double speedup = speedup(data, SLEEP_COMPARATOR, procs * 2, procs * 2);
-        Assert.assertTrue("Not parallel", speedup > procs / 1.5);
+        final List<Integer> data = randomList(100 * PROCESSORS);
+        final double speedup = speedup(data, SLEEP_COMPARATOR, PROCESSORS * 2);
+        Assert.assertTrue("Not parallel", speedup > 0.66);
     }
 
     @Test
     public void test06_burnPerformance() throws InterruptedException {
-        final List<Integer> data = randomList(200);
-        final int procs = Runtime.getRuntime().availableProcessors();
-        final double speedup = speedup(data, BURN_COMPARATOR, procs, procs);
-        Assert.assertTrue("Not parallel", speedup > procs / 1.5);
-        Assert.assertTrue("Too parallel", speedup < procs * 1.2);
+        final List<Integer> data = randomList(100 * PROCESSORS);
+        final double speedup = speedup(data, BURN_COMPARATOR, PROCESSORS);
+        Assert.assertTrue("Not parallel", speedup > 0.66);
+        Assert.assertTrue("Too parallel", speedup < 1.2);
     }
 
-    protected double speedup(final List<Integer> data, final Comparator<Integer> sleepComparator, final int parts, final int threads) throws InterruptedException {
-        final long time1 = speed(1, 4, data, ScalarIP::maximum, sleepComparator);
-        final long time2 = speed(threads, 4 * parts, data, ScalarIP::maximum, sleepComparator);
-        final double speedup = time1 / (double) time2;
-        System.err.format("Speed up %.1f\n", speedup);
+    protected double speedup(final List<Integer> data, final Comparator<Integer> comparator, final int threads) throws InterruptedException {
+        System.err.println("    Warm up");
+        final ConcurrentFunction<P, Integer, Comparator<Integer>> maximum = ScalarIP::maximum;
+        for (int i = 0; i < 5; i++) {
+            performance(threads, threads, data, maximum, comparator);
+        }
+        System.err.println("    Measurement");
+
+        final double performance1 = performance(1, threads, data, maximum, comparator);
+        final double performance2 = performance(threads, threads, data, maximum, comparator);
+        final double speedup = performance2 / performance1;
+        System.err.format("    Performance ratio %.1f for %d threads (%.1f %.1f ms/op)%n", speedup, threads, performance1, performance2);
         return speedup;
     }
 
-    private long speed(final int threads, final int subtasks, final List<Integer> data, final ConcurrentFunction<P, Integer, Comparator<Integer>> f, final Comparator<Integer> comparator) throws InterruptedException {
+    protected int getSubtasks(final int threads, final int totalThreads) {
+        return threads;
+    }
+
+   private double performance(final int threads, final int totalThreads, final List<Integer> data, final ConcurrentFunction<P, Integer, Comparator<Integer>> f, final Comparator<Integer> comparator) throws InterruptedException {
+        final int subtasks = getSubtasks(threads, totalThreads);
         final long start = System.nanoTime();
         f.apply(createInstance(threads), subtasks, data, comparator);
-        return System.nanoTime() - start;
+        final long time = System.nanoTime() - start;
+
+        final double ops = (subtasks - 1) + (Math.ceil(data.size() / (double) threads) - 1);
+        return time / 1e6 / ops;
     }
 
     protected <T, U> void test(final BiFunction<List<Integer>, U, T> fExpected, final ConcurrentFunction<P, T, U> fActual, final List<Named<U>> cases) throws InterruptedException {
