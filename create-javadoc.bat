@@ -1,1 +1,1 @@
-javadoc -d doc -author -link https://docs.oracle.com/javase/8/docs/api/ -private -sourcepath java -cp out/production/advanced_java;tests/JarImplementorTest.jar;lib/junit-4.11.jar java/ru/ifmo/ctddev/golchin/implementor/Implementor.java
+javadoc -d doc -author -link https://docs.oracle.com/javase/8/docs/api/ -private -sourcepath java -cp tests/JarImplementorTest.jar;lib/junit-4.11.jar java/ru/ifmo/ctddev/golchin/implementor/Implementor.java
