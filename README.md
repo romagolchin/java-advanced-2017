@@ -1,3 +1,7 @@
+[Задание 2](java/ru/ifmo/ctddev/golchin/sortedset/ArraySet.java)
+
+[Задания 3, 4, 5](java/ru/ifmo/ctddev/golchin/implementor/Implementor.java)
+
 Тесты к курсу «Технологии Java»
 ====
 
